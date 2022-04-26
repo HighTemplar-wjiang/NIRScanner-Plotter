@@ -1,0 +1,48 @@
+{% load staticfiles %}
+{% csrf_token %}
+
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <script src="{% static 'dependencies/d3.v5.min.js' %}"></script>
+    <script src="{% static 'dependencies/vue.js' %}"></script>
+    <script src="{% static 'dependencies/js.cookie.min.js' %}"></script>
+</head>
+<body>
+
+<div id="app">
+    <div class="settings">API: <input id="api-input" class="url-input">
+        <button v-on:click="setApi">Update</button>
+    </div>
+    <div class="settings">Current API: [[ api ]]</div>
+    <canvas id="plotter-canvas" v-bind:style="{ width: imageWidth+'px', height: imageHeight+'px' }"></canvas>
+    <div id="control-panel">
+        <div id="left-panel" class="panel-module">
+            <p>Message: [[ message ]]</p>
+            <p>Status: [[ plotterState ]] | ([[ plotterPosition.x.toFixed(2) ]]mm, [[ plotterPosition.y.toFixed(2) ]]mm)
+                <button v-on:click="unlockPlotter">Unlock</button>
+                <button v-on:click="movePlotter({'x': 0.0, 'y': 0.0})">Home</button>
+                <button v-on:click="setPlotterZeroPoint">Setzero</button>
+            </p>
+            <p>Click: ([[ targetPoint.x.toFixed(2) ]], [[ targetPoint.y.toFixed(2) ]]) ==> ([[
+                targetPositionMm.x.toFixed(2)
+                ]]mm, [[ targetPositionMm.y.toFixed(2) ]]mm)</p>
+        </div>
+        <div id="right-panel" class="panel-module">
+            <p>Goto: x = <input id="input-goto-x" class="coordinate-input" type="number">mm,
+                     y = <input id="input-goto-y" class="coordinate-input" type="number">mm
+                <button v-on:click="absoluteMoveHandler">Send</button>
+            </p>
+            <p>Move: x = <input id="input-move-x" class="coordinate-input" type="number">mm,
+                     y = <input id="input-move-y" class="coordinate-input" type="number">mm
+                <button v-on:click="incrementalMoveHandler">Send</button>
+            </p>
+            <p><input type="checkbox" v-model="boundaryCheckFlag"> Boundary check</p>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'utils.js' %}"></script>
+<script src="{% static 'index.js' %}"></script>
+</body>
+</html>
